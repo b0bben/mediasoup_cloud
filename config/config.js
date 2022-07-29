@@ -13,7 +13,7 @@ const os = require('os');
 module.exports =
 {
 	// Listening hostname (just for `gulp live` task).
-	domain : process.env.DOMAIN || '0.0.0.0',
+	domain : process.env.DOMAIN || 'localhost',
 	// Signaling settings (protoo WebSocket server and HTTP API server).
 	https  :
 	{
@@ -31,7 +31,7 @@ module.exports =
 	mediasoup :
 	{
 		// Number of mediasoup workers to launch.
-		numWorkers : Object.keys(os.cpus()).length,
+		numWorkers     : Object.keys(os.cpus()).length,
 		// mediasoup WorkerSettings.
 		// See https://mediasoup.org/documentation/v3/mediasoup/api/#WorkerSettings
 		workerSettings :
@@ -112,16 +112,41 @@ module.exports =
 				}
 			]
 		},
+		// mediasoup WebRtcServer options for WebRTC endpoints (mediasoup-client,
+		// libmediasoupclient).
+		// See https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcServerOptions
+		// NOTE: mediasoup-demo/server/lib/Room.js will increase this port for
+		// each mediasoup Worker since each Worker is a separate process.
+		webRtcServerOptions :
+		{
+			listenInfos :
+			[
+				{
+					protocol    : 'udp',
+					ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+					announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP,
+					port        : 44444
+				},
+				{
+					protocol    : 'tcp',
+					ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+					announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP,
+					port        : 44444
+				}
+			],
+		},
 		// mediasoup WebRtcTransport options for WebRTC endpoints (mediasoup-client,
 		// libmediasoupclient).
 		// See https://mediasoup.org/documentation/v3/mediasoup/api/#WebRtcTransportOptions
 		webRtcTransportOptions :
 		{
+			// listenIps is not needed since webRtcServer is used.
+			// However passing MEDIASOUP_USE_WEBRTC_SERVER=false will change it.
 			listenIps :
 			[
 				{
-					ip          : process.env.MEDIASOUP_LISTEN_IP || '127.0.0.1',
-					announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP || '0.0.0.0'
+					ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+					announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP
 				}
 			],
 			initialAvailableOutgoingBitrate : 1000000,
@@ -137,8 +162,8 @@ module.exports =
 		{
 			listenIp :
 			{
-				ip          : process.env.MEDIASOUP_LISTEN_IP || '127.0.0.1',
-				announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP || '0.0.0.0'
+				ip          : process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+				announcedIp : process.env.MEDIASOUP_ANNOUNCED_IP
 			},
 			maxSctpMessageSize : 262144
 		}
