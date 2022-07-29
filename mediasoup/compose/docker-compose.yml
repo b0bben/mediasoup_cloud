@@ -3,8 +3,7 @@ version: '3'
 services:
     # Frontend
     mediasoupFrontend:
-        #image: ysf465639310/mediasoup-demo-cloud:v2
-        image: mollo-mediasoup-demo:latest
+        image: b0bben/mollo-mediasoup-demo:latest
         #ports:
         #  - 9443:9443
         #  - 3000:3000
@@ -30,8 +29,7 @@ services:
                 
     # mediasoup-worker
     mediasoup:
-        #image: ysf465639310/mediasoup-demo-cloud:v2
-        image: mollo-mediasoup-demo:latest
+        image: b0bben/mollo-mediasoup-demo:latest
         #ports:
         #  - '${PROTOO_LISTEN_PORT}:${PROTOO_LISTEN_PORT}'
         #  - '${MEDIASOUP_MIN_PORT}-${MEDIASOUP_MAX_PORT}:${MEDIASOUP_MIN_PORT}-${MEDIASOUP_MAX_PORT}/udp'
